@@ -104,3 +104,55 @@ InitTestScene*.unity*
 
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
+
+# ---------------------------------------------------------------------------
+# Global rules (https://github.com/github/gitignore/tree/main/Global)
+# ---------------------------------------------------------------------------
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+desktop.ini
+$RECYCLE.BIN/
+*.stackdump
+*.lnk
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+.fseventsd
+.TemporaryItems
+.DocumentRevisions-V100
+
+# Linux
+*~
+.directory
+.Trash-*
+
+# JetBrains Rider / IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Visual Studio Code
+.vscode/
+
+# Visual Studio
+*.sln.docstates
+*.psess
+*.vsp
+*.vspx
+
+# Backup / merge leftovers
+*.orig
+*.rej
+*.bak
+*.old
