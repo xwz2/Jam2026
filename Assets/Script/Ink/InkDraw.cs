@@ -18,9 +18,13 @@ public class InkDraw : MonoBehaviour
     [Min(0.1f)]
     [SerializeField] private float capacity = 20f;
 
-    [Tooltip("Ink regained per second.")]
+    [Tooltip("Ink regained per second while the character stands on REAL ground (not on drawn ink lines, " +
+             "not airborne). No refill happens anywhere else.")]
     [Min(0f)]
     [SerializeField] private float refillRate = 2f;
+
+    [Tooltip("The character whose footing gates the refill. Empty = found automatically on Awake.")]
+    [SerializeField] private PlayerController player;
 
     [Tooltip("Also refill while the player is actively drawing. Off = the tank only recovers between strokes.")]
     [SerializeField] private bool refillWhileDrawing = false;
@@ -123,6 +127,8 @@ public class InkDraw : MonoBehaviour
         currentInk = capacity; // complete at first, per design
         if (drawCamera == null)
             drawCamera = Camera.main;
+        if (player == null)
+            player = FindFirstObjectByType<PlayerController>();
 
         // Drawing loop: 2D (screen-wide action, distance is meaningless for it),
         // volume-ramped so strokes never start or end with a click.
@@ -177,6 +183,12 @@ public class InkDraw : MonoBehaviour
         if (refillRate <= 0f || currentInk >= capacity)
             return;
         if (IsDrawing && !refillWhileDrawing)
+            return;
+
+        // The tank only recovers with both feet on real ground: airborne or
+        // standing on drawn ink lines earns nothing. (No player found = the
+        // old always-refill behavior, so the ink system works standalone.)
+        if (player != null && (!player.IsGrounded || player.IsOnInk))
             return;
 
         currentInk = Mathf.Min(capacity, currentInk + refillRate * Time.deltaTime);

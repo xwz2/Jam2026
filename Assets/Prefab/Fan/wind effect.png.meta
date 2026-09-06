@@ -1,0 +1,374 @@
+fileFormatVersion: 2
+guid: 157524e84d60b814fb4a1fbf8aaf55df
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -8046615252477929502
+    second: wind effect_0
+  - first:
+      213: -14262612750234362
+    second: wind effect_1
+  - first:
+      213: 8722358085726453267
+    second: wind effect_2
+  - first:
+      213: 6972779674730007294
+    second: wind effect_3
+  - first:
+      213: -6648765703389849929
+    second: wind effect_4
+  - first:
+      213: 8670924098508597721
+    second: wind effect_5
+  - first:
+      213: -8743188052109219007
+    second: wind effect_6
+  - first:
+      213: 4901123241600721594
+    second: wind effect_7
+  - first:
+      213: 8873607694301792199
+    second: wind effect_8
+  - first:
+      213: -5148731203028899765
+    second: wind effect_9
+  - first:
+      213: 7173683140668477988
+    second: wind effect_10
+  - first:
+      213: -9033053359402500361
+    second: wind effect_11
+  - first:
+      213: -3371601921161142801
+    second: wind effect_12
+  - first:
+      213: -3378191012969609066
+    second: wind effect_13
+  - first:
+      213: 1483987578313174005
+    second: wind effect_14
+  - first:
+      213: -5633956098632075697
+    second: wind effect_15
+  - first:
+      213: 3171470860246141111
+    second: wind effect_16
+  - first:
+      213: -3308383220252821193
+    second: wind effect_17
+  - first:
+      213: -750403437093786831
+    second: wind effect_18
+  - first:
+      213: -2469854558248536273
+    second: wind effect_19
+  - first:
+      213: 6179147640346280296
+    second: wind effect_20
+  - first:
+      213: 1287510173419128103
+    second: wind effect_21
+  - first:
+      213: -904201042594449367
+    second: wind effect_22
+  - first:
+      213: -4959865649531748527
+    second: wind effect_23
+  - first:
+      213: 6549332749648075404
+    second: wind effect_24
+  - first:
+      213: -8246704372806340373
+    second: wind effect_25
+  - first:
+      213: -2542360091928478558
+    second: wind effect_26
+  - first:
+      213: 7517589591611836165
+    second: wind effect_27
+  - first:
+      213: 8531372260208991246
+    second: wind effect_28
+  - first:
+      213: -4104684382792804555
+    second: wind effect_29
+  - first:
+      213: 7377010422953259480
+    second: wind effect_30
+  - first:
+      213: 3708071179986126344
+    second: wind effect_31
+  - first:
+      213: -6545363068855052231
+    second: wind effect_32
+  - first:
+      213: -7278612141226570231
+    second: wind effect_33
+  - first:
+      213: -7964240475342033087
+    second: wind effect_34
+  - first:
+      213: -2238445202310452787
+    second: wind effect_35
+  - first:
+      213: -7573110682082668850
+    second: wind effect_36
+  - first:
+      213: -1091401970069674134
+    second: wind effect_37
+  - first:
+      213: 2075975226346370831
+    second: wind effect_38
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: wind effect_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 362
+        height: 724
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2e710d78f0ea45090800000000000000
+      internalID: -8046615252477929502
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wind effect_1
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 0
+        width: 362
+        height: 724
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 300fe2f2262891645813f7b046241d4a
+      internalID: -14262612750234362
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wind effect_2
+      rect:
+        serializedVersion: 2
+        x: 724
+        y: 0
+        width: 362
+        height: 724
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6d4fa017dab41604993261eb8ccfda2e
+      internalID: 8722358085726453267
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wind effect_3
+      rect:
+        serializedVersion: 2
+        x: 1086
+        y: 0
+        width: 362
+        height: 724
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 82da78f9e7f60de46bb55ab91db9ba2e
+      internalID: 6972779674730007294
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wind effect_4
+      rect:
+        serializedVersion: 2
+        x: 1448
+        y: 0
+        width: 362
+        height: 724
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 66ad42769724ff245aeed5021889552d
+      internalID: -6648765703389849929
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wind effect_5
+      rect:
+        serializedVersion: 2
+        x: 1810
+        y: 0
+        width: 362
+        height: 724
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b3a180555db482b4c99e82c0f3209b66
+      internalID: 8670924098508597721
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":6.0,"y":1.0},"gridSpriteSize":{"x":362.0,"y":724.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      wind effect_0: -8046615252477929502
+      wind effect_1: -14262612750234362
+      wind effect_2: 8722358085726453267
+      wind effect_3: 6972779674730007294
+      wind effect_4: -6648765703389849929
+      wind effect_5: 8670924098508597721
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

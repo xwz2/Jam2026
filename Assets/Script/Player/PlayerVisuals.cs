@@ -49,23 +49,26 @@ public class PlayerVisuals : MonoBehaviour
     [Tooltip("Fade breathing out while running or airborne so it does not fight the motion.")]
     [SerializeField] private bool breatheOnlyWhenIdle = true;
 
-    [Header("Jump & land squash")]
-    [Tooltip("Vertical stretch applied at the moment of a jump. 0.15 = 15% taller, thinner.")]
-    [Range(0f, 0.5f)]
-    [SerializeField] private float jumpStretch = 0.15f;
+    [Header("Landing squash")]
+    [Tooltip("How much the character compresses in Y on touchdown. 0.25 = 25% shorter for a moment.")]
+    [Range(0f, 0.9f)]
+    [SerializeField] private float landSquashAmount = 0.25f;
 
-    [Tooltip("Vertical squash applied at the moment of landing.")]
-    [Range(0f, 0.5f)]
-    [SerializeField] private float landSquash = 0.12f;
+    [Tooltip("How much of that compression widens the character. 0.5 = X gains half of what Y loses (a bit fat); " +
+             "0 = pure Y squash, 1 = fully mirrored.")]
+    [Range(0f, 1f)]
+    [SerializeField] private float landWidthGain = 0.5f;
 
-    [Tooltip("How quickly squash/stretch springs back to normal, in 1/seconds.")]
-    [SerializeField] private float squashRecovery = 10f;
+    [Tooltip("How fast the squash relaxes back to normal, in cycles per second. Higher = snappier recovery.")]
+    [Min(0.5f)]
+    [SerializeField] private float squashFrequency = 5f;
 
     private PlayerController controller;
     private Vector3 baseScale;
     private float facing = 1f;        // smoothed -1..1
     private float currentLean;        // smoothed degrees
-    private float squash;             // +stretch / -squash impulse, decays to 0
+    private float squash;             // 0..1 landing compression, spring settles it to 0
+    private float squashVelocity;     // spring state
     private float breathPhase;
     private float breathWeight = 1f;  // fades in/out with idleness
     private float stumblePhase;
@@ -80,22 +83,6 @@ public class PlayerVisuals : MonoBehaviour
 
         baseScale = visualTarget.localScale;
         facing = spriteFacesLeft ? -1f : 1f;
-    }
-
-    private void OnEnable()
-    {
-        controller.Jumped += OnJumped;
-    }
-
-    private void OnDisable()
-    {
-        controller.Jumped -= OnJumped;
-    }
-
-    private void OnJumped(bool isDoubleJump)
-    {
-        // The double jump pops a little harder so the player can feel it registered.
-        squash = jumpStretch * (isDoubleJump ? 1.4f : 1f);
     }
 
     private void LateUpdate()
@@ -120,26 +107,36 @@ public class PlayerVisuals : MonoBehaviour
         stumblePhase += stumbleRate * 2f * Mathf.PI * dt;
         float stumble = Mathf.Sin(stumblePhase) * stumbleAngle * stumbleWeight;
 
-        // --- landing squash ---
+        // --- landing squash: compress Y (and widen X a bit) on touchdown,
+        // then a critically damped spring relaxes it straight back to normal ---
         bool groundedNow = controller.IsGrounded;
         if (groundedNow && !wasGrounded)
-            squash = -landSquash;
+        {
+            squash = landSquashAmount;
+            squashVelocity = 0f;
+        }
         wasGrounded = groundedNow;
-        squash = Mathf.Lerp(squash, 0f, 1f - Mathf.Exp(-squashRecovery * dt));
 
-        // --- breathing: sine on width, with the inverse on height to keep volume ---
+        float omega = squashFrequency * 2f * Mathf.PI;
+        squashVelocity += -omega * omega * squash * dt;
+        squashVelocity *= Mathf.Exp(-2f * omega * dt);
+        squash += squashVelocity * dt;
+
+        // --- breathing: sine on width, silenced entirely while a squash plays
+        // so the jump/land shape change is the only thing the eye reads ---
+        bool squashActive = Mathf.Abs(squash) > 0.02f || Mathf.Abs(squashVelocity) > 0.1f;
         bool idle = groundedNow && Mathf.Approximately(move, 0f);
-        float targetWeight = (!breatheOnlyWhenIdle || idle) ? 1f : 0f;
-        breathWeight = Mathf.MoveTowards(breathWeight, targetWeight, 4f * dt);
+        float targetWeight = ((!breatheOnlyWhenIdle || idle) && !squashActive) ? 1f : 0f;
+        breathWeight = Mathf.MoveTowards(breathWeight, targetWeight, 10f * dt);
         breathPhase += breathingRate * 2f * Mathf.PI * dt;
         float breath = Mathf.Sin(breathPhase) * breathingAmount * breathWeight;
 
         // --- single combined write ---
-        // Width: facing sign, breathing swell, inverse of squash (jump = thinner).
-        // Height: inverse breathing, plus squash (jump = taller, land = shorter).
+        // Landing squash: Y compresses by the full amount, X widens by
+        // landWidthGain of it. Clamped so nothing can invert or flatten.
         float facingSign = facing < 0f ? -1f : 1f;
-        float x = baseScale.x * facingSign * (1f + breath - squash * 0.5f);
-        float y = baseScale.y * (1f - breath * 0.5f + squash);
+        float x = baseScale.x * facingSign * Mathf.Max(0.1f, 1f + breath + squash * landWidthGain);
+        float y = baseScale.y * Mathf.Max(0.1f, 1f - breath * 0.5f - squash);
 
         visualTarget.localScale = new Vector3(x, y, baseScale.z);
         visualTarget.localRotation = Quaternion.Euler(0f, 0f, currentLean + stumble);

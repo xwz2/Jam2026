@@ -30,6 +30,13 @@ public class PlayerRespawn : MonoBehaviour
     private Rigidbody2D rb;
     private SpriteRenderer[] renderers;
     private Vector3 initialPosition;
+    private Checkpoint activeCheckpoint;
+
+    /// <summary>Called by a <see cref="Checkpoint"/> when the player enters it; the latest one wins.</summary>
+    public void SetCheckpoint(Checkpoint checkpoint)
+    {
+        activeCheckpoint = checkpoint;
+    }
 
     private void Awake()
     {
@@ -67,7 +74,10 @@ public class PlayerRespawn : MonoBehaviour
         if (respawnDelay > 0f)
             yield return new WaitForSeconds(respawnDelay);
 
-        transform.position = respawnPoint != null ? respawnPoint.position : initialPosition;
+        // Priority: latest checkpoint > manually assigned respawn point > scene start.
+        transform.position = activeCheckpoint != null
+            ? activeCheckpoint.RespawnPosition
+            : respawnPoint != null ? respawnPoint.position : initialPosition;
         controller.SnapCameraToTarget(); // no cross-level camera swoop while invisible
 
         rb.simulated = true;
