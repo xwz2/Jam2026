@@ -1,0 +1,305 @@
+fileFormatVersion: 2
+guid: 1b8a234e34c132845b15eda5758b4318
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1976684988386154508
+    second: Exploding Meteor Animation_0
+  - first:
+      213: -740829022880610746
+    second: Exploding Meteor Animation_1
+  - first:
+      213: -4164511974955212358
+    second: Exploding Meteor Animation_2
+  - first:
+      213: -8939863681486372369
+    second: Exploding Meteor Animation_3
+  - first:
+      213: 7295659430129997924
+    second: Exploding Meteor Animation_4
+  - first:
+      213: -7200258520938830154
+    second: Exploding Meteor Animation_5
+  - first:
+      213: 929969166927551449
+    second: Exploding Meteor Animation_6
+  - first:
+      213: 1024764184223928236
+    second: Exploding Meteor Animation_7
+  - first:
+      213: -3850380742506959644
+    second: Exploding Meteor Animation_8
+  - first:
+      213: 4251044501063219861
+    second: Exploding Meteor Animation_9
+  - first:
+      213: -4873254703425758334
+    second: Exploding Meteor Animation_10
+  - first:
+      213: -68324868599133622
+    second: Exploding Meteor Animation_11
+  - first:
+      213: 4831974577333183569
+    second: Exploding Meteor Animation_12
+  - first:
+      213: -8441186271641306796
+    second: Exploding Meteor Animation_13
+  - first:
+      213: 6451713207732223025
+    second: Exploding Meteor Animation_14
+  - first:
+      213: -4370577086545346813
+    second: Exploding Meteor Animation_15
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 1
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Exploding Meteor Animation_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 603
+        width: 535
+        height: 602
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c089a9526889e6b10800000000000000
+      internalID: 1976684988386154508
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Exploding Meteor Animation_1
+      rect:
+        serializedVersion: 2
+        x: 535
+        y: 603
+        width: 535
+        height: 602
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 646c6e3cdeb08b5f0800000000000000
+      internalID: -740829022880610746
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Exploding Meteor Animation_2
+      rect:
+        serializedVersion: 2
+        x: 1070
+        y: 603
+        width: 535
+        height: 602
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab12fed5c6ea436c0800000000000000
+      internalID: -4164511974955212358
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Exploding Meteor Animation_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1
+        width: 535
+        height: 602
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fe1c69cd8593fe380800000000000000
+      internalID: -8939863681486372369
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Exploding Meteor Animation_4
+      rect:
+        serializedVersion: 2
+        x: 535
+        y: 1
+        width: 535
+        height: 602
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 468902ff8936f3560800000000000000
+      internalID: 7295659430129997924
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Exploding Meteor Animation_5
+      rect:
+        serializedVersion: 2
+        x: 1070
+        y: 1
+        width: 535
+        height: 602
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6b62678160b831c90800000000000000
+      internalID: -7200258520938830154
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 478c30b5f88711e4ca1dc086b95c2e03
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":3.0,"y":2.0},"gridSpriteSize":{"x":535.0,"y":602.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      Exploding Meteor Animation_0: 1976684988386154508
+      Exploding Meteor Animation_1: -740829022880610746
+      Exploding Meteor Animation_2: -4164511974955212358
+      Exploding Meteor Animation_3: -8939863681486372369
+      Exploding Meteor Animation_4: 7295659430129997924
+      Exploding Meteor Animation_5: -7200258520938830154
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

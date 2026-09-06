@@ -145,6 +145,15 @@ public class InkDraw : MonoBehaviour
 
     private void Update()
     {
+        // Paused (menu open): no drawing, no refill — clicks belong to the UI.
+        if (Time.timeScale == 0f)
+        {
+            if (activeLine != null)
+                FinishStroke();
+            UpdateDrawingSound();
+            return;
+        }
+
         Refill();
         UpdateDrawingSound();
 

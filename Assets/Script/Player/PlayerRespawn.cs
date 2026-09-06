@@ -38,6 +38,26 @@ public class PlayerRespawn : MonoBehaviour
         activeCheckpoint = checkpoint;
     }
 
+    /// <summary>
+    /// Full restart: back to the SCENE-START position (checkpoints are cleared,
+    /// not respected), alive, visible, camera snapped. Used by the menu's
+    /// Restart button; safe to call even mid-death-fade.
+    /// </summary>
+    public void ResetToStart()
+    {
+        StopAllCoroutines(); // cancel a death fade in progress
+        activeCheckpoint = null;
+
+        rb.simulated = true;
+        rb.linearVelocity = Vector2.zero;
+        transform.position = initialPosition;
+
+        SetAlpha(1f);
+        controller.SnapCameraToTarget();
+        if (!controller.IsAlive)
+            controller.Revive();
+    }
+
     private void Awake()
     {
         controller = GetComponent<PlayerController>();

@@ -194,6 +194,12 @@ public class PlayerController : MonoBehaviour
             : Vector3.SmoothDamp(cameraTransform.position, desired, ref cameraFollowVelocity, cameraDamping);
     }
 
+    /// <summary>Where the camera wants to be for this character (position + offset), for cinematic glides.</summary>
+    public Vector3 CameraTargetPosition => transform.position + cameraOffset;
+
+    /// <summary>The camera this controller drives (may be null before Awake).</summary>
+    public Transform CameraTransform => cameraTransform;
+
     /// <summary>Puts the camera exactly on target with no easing — call after teleporting the character.</summary>
     public void SnapCameraToTarget()
     {
