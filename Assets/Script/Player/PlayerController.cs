@@ -47,6 +47,21 @@ public class PlayerController : MonoBehaviour
     [Min(0f)]
     [SerializeField] private float coyoteTime = 0.1f;
 
+    [Header("Camera")]
+    [Tooltip("Move the camera with the character, rigidly locked (no lag, no jitter).")]
+    [SerializeField] private bool moveCamera = true;
+
+    [Tooltip("Camera to move. Empty = the Main Camera.")]
+    [SerializeField] private Transform cameraTransform;
+
+    [Tooltip("Camera position relative to the character. Keep Z negative so the camera stays back.")]
+    [SerializeField] private Vector3 cameraOffset = new Vector3(0f, 1f, -10f);
+
+    [Tooltip("Seconds the camera lags behind the character. 0 = rigid lock (jitter-free but stiff), " +
+             "0.1-0.3 = smooth trailing follow.")]
+    [Min(0f)]
+    [SerializeField] private float cameraDamping = 0.15f;
+
     [Header("Ground check")]
     [Tooltip("Empty child placed at the character's feet. If empty, the collider's bottom edge is used.")]
     [SerializeField] private Transform groundCheck;
@@ -66,6 +81,7 @@ public class PlayerController : MonoBehaviour
     private float firstJumpTime = float.NegativeInfinity;
     private int jumpsUsed;
     private float baseGravityScale;
+    private Vector3 cameraFollowVelocity;
 
     /// <summary>-1..1 input the visuals use to face and lean the sprite.</summary>
     public float MoveInput => moveInput;
@@ -123,6 +139,9 @@ public class PlayerController : MonoBehaviour
         // interpolation the body visibly stutters whenever it moves.
         rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+
+        if (cameraTransform == null && Camera.main != null)
+            cameraTransform = Camera.main.transform;
     }
 
     private void Update()
@@ -141,6 +160,31 @@ public class PlayerController : MonoBehaviour
         // Buffer the press; the jump itself happens in FixedUpdate with the physics.
         if (keyboard.spaceKey.wasPressedThisFrame)
             jumpQueued = true;
+    }
+
+    // The camera is written in LateUpdate, not FixedUpdate: the rigidbody's
+    // transform is interpolated per rendered frame, so following it from here
+    // tracks smooth motion — SmoothDamp on top adds lag without jitter.
+    private void LateUpdate()
+    {
+        if (!moveCamera || cameraTransform == null)
+            return;
+
+        Vector3 desired = transform.position + cameraOffset;
+
+        cameraTransform.position = cameraDamping <= 0f
+            ? desired
+            : Vector3.SmoothDamp(cameraTransform.position, desired, ref cameraFollowVelocity, cameraDamping);
+    }
+
+    /// <summary>Puts the camera exactly on target with no easing — call after teleporting the character.</summary>
+    public void SnapCameraToTarget()
+    {
+        if (cameraTransform == null)
+            return;
+
+        cameraFollowVelocity = Vector3.zero;
+        cameraTransform.position = transform.position + cameraOffset;
     }
 
     private void FixedUpdate()

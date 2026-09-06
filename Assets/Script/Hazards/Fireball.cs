@@ -41,8 +41,31 @@ public class Fireball : MonoBehaviour
     [Min(0.05f)]
     [SerializeField] private float explosionFallbackDuration = 0.6f;
 
+    [Header("Audio")]
+    [Tooltip("Looping burn sound played the whole time the fireball is alive; fades with the fireball.")]
+    [SerializeField] private AudioClip burningSound;
+
+    [Range(0f, 1f)]
+    [SerializeField] private float burningVolume = 0.6f;
+
+    [Tooltip("Played exactly once on impact. Detached from the fireball so it finishes even after destruction.")]
+    [SerializeField] private AudioClip explosionSound;
+
+    [Range(0f, 1f)]
+    [SerializeField] private float explosionVolume = 1f;
+
+    [Tooltip("Distance (from the camera/listener) inside which the sound plays at full volume. " +
+             "The camera sits ~10 units back, so values below 10 can never be reached.")]
+    [Min(1f)]
+    [SerializeField] private float minAudibleDistance = 11f;
+
+    [Tooltip("Distance at which the sound has faded to silence. Fireballs farther than this are inaudible.")]
+    [Min(2f)]
+    [SerializeField] private float maxAudibleDistance = 30f;
+
     private Rigidbody2D rb;
     private SpriteRenderer[] renderers;
+    private AudioSource burningSource;
     private float age;
     private bool exploded;
 
@@ -59,6 +82,18 @@ public class Fireball : MonoBehaviour
         renderers = visual != null
             ? visual.GetComponentsInChildren<SpriteRenderer>()
             : GetComponentsInChildren<SpriteRenderer>();
+
+        // The looping burn: built in code so the prefab needs no AudioSource.
+        if (burningSound != null)
+        {
+            burningSource = gameObject.AddComponent<AudioSource>();
+            burningSource.clip = burningSound;
+            burningSource.loop = true;
+            burningSource.playOnAwake = false;
+            burningSource.volume = burningVolume;
+            Configure3D(burningSource, minAudibleDistance, maxAudibleDistance);
+            burningSource.Play();
+        }
 
         // Fireballs fly on rails: no gravity, no spin from physics, and a
         // trigger collider so they detect hits without shoving blocks around.
@@ -124,6 +159,14 @@ public class Fireball : MonoBehaviour
         rb.linearVelocity = Vector2.zero;
         rb.simulated = false;
 
+        // The fire is out the moment it hits; the explosion takes over. The
+        // one-shot lives on its own object so destroying the fireball at the
+        // end of the explosion animation can never cut the sound short.
+        if (burningSource != null)
+            burningSource.Stop();
+        if (explosionSound != null)
+            PlayOneShot(explosionSound, explosionVolume, transform.position, minAudibleDistance, maxAudibleDistance);
+
         StartCoroutine(ExplodeRoutine());
     }
 
@@ -178,5 +221,37 @@ public class Fireball : MonoBehaviour
             c.a = alpha;
             r.color = c;
         }
+
+        // The burn loop dies with the visual: end-of-lifetime fade quiets it too.
+        if (burningSource != null && burningSource.isPlaying)
+            burningSource.volume = burningVolume * alpha;
+    }
+
+    /// <summary>Positional fire-and-forget one-shot that outlives its caller, with our rolloff settings.</summary>
+    private static void PlayOneShot(AudioClip clip, float volume, Vector3 position, float minDist, float maxDist)
+    {
+        var go = new GameObject("One-shot audio: " + clip.name);
+        go.transform.position = position;
+        var source = go.AddComponent<AudioSource>();
+        source.clip = clip;
+        source.volume = volume;
+        Configure3D(source, minDist, maxDist);
+        source.Play();
+        Destroy(go, clip.length + 0.1f);
+    }
+
+    /// <summary>
+    /// Positional audio tuned for a 2D game: linear falloff between the two
+    /// distances (predictable, unlike the logarithmic default that never quite
+    /// reaches zero) and no doppler — a fast fireball would otherwise
+    /// pitch-bend like a passing ambulance.
+    /// </summary>
+    private static void Configure3D(AudioSource source, float minDist, float maxDist)
+    {
+        source.spatialBlend = 1f;
+        source.rolloffMode = AudioRolloffMode.Linear;
+        source.minDistance = minDist;
+        source.maxDistance = Mathf.Max(maxDist, minDist + 1f);
+        source.dopplerLevel = 0f;
     }
 }

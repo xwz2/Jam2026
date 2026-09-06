@@ -71,6 +71,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5907893917043632455}
+  - component: {fileID: 8121222092447934582}
   m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
@@ -102,13 +103,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4848393039647820210}
-  - component: {fileID: 8121222092447934582}
   - component: {fileID: 1061596345547667196}
   - component: {fileID: 4385614008753037569}
   - component: {fileID: 3150544994828105510}
   - component: {fileID: 6574757193573282586}
   - component: {fileID: 6010739998698396002}
   - component: {fileID: 7412559863201478331}
+  - component: {fileID: 7412559863201478332}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -141,7 +142,7 @@ SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8620886302510449062}
+  m_GameObject: {fileID: 4425971839932495801}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -257,7 +258,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5470603a2af1194e9d57eb65961dce0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerVisuals
-  visualTarget: {fileID: 0}
+  visualTarget: {fileID: 5907893917043632455}
   spriteFacesLeft: 0
   leanAngle: 8
   leanResponse: 12
@@ -338,3 +339,25 @@ MonoBehaviour:
   fadeOutDuration: 0.6
   respawnDelay: 0.4
   fadeInDuration: 0.3
+--- !u!114 &7412559863201478332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8620886302510449062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95e51adb8a7d44f6bd1d0ae879cb3842, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAudio
+  footstepsSound: {fileID: 8300000, guid: cee49aab12334f60a628f9e3c8e32db8, type: 3}
+  footstepsVolume: 0.5
+  footstepsMinSpeed: 0.5
+  footstepsFadeResponse: 12
+  jumpSound: {fileID: 8300000, guid: a410f13f716a40aaa263da5270e08e0d, type: 3}
+  jumpVolume: 0.8
+  doubleJumpPitch: 1.15
+  landingSound: {fileID: 8300000, guid: 6491940fa26f4410a88badcca42e49b7, type: 3}
+  landingVolume: 0.7
+  landingMinFallSpeed: 1.5

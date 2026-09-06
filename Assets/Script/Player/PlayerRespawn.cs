@@ -68,6 +68,7 @@ public class PlayerRespawn : MonoBehaviour
             yield return new WaitForSeconds(respawnDelay);
 
         transform.position = respawnPoint != null ? respawnPoint.position : initialPosition;
+        controller.SnapCameraToTarget(); // no cross-level camera swoop while invisible
 
         rb.simulated = true;
         yield return Fade(0f, 1f, fadeInDuration);
