@@ -96,6 +96,9 @@ public class PlayerController : MonoBehaviour
     /// <summary>Raised once when the character dies.</summary>
     public event Action Died;
 
+    /// <summary>Raised when the character comes back to life at the end of the respawn flow.</summary>
+    public event Action Revived;
+
     /// <summary>Kills the character: flips the alive flag off and stops accepting input.</summary>
     public void Kill()
     {
@@ -113,6 +116,7 @@ public class PlayerController : MonoBehaviour
     {
         alive = true;
         jumpsUsed = 0;
+        Revived?.Invoke();
     }
 
     /// <summary>Toggle the mid-air second jump — the inspector checkbox, also settable from gameplay code.</summary>

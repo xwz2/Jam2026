@@ -26,6 +26,18 @@ public class PlayerVisuals : MonoBehaviour
     [Tooltip("How quickly the lean and the facing flip settle, in 1/seconds. Higher = snappier.")]
     [SerializeField] private float leanResponse = 12f;
 
+    [Header("Stumble")]
+    [Tooltip("While moving, the character rocks back and forth around its center by +/- this many degrees. 0 = off.")]
+    [Range(0f, 45f)]
+    [SerializeField] private float stumbleAngle = 10f;
+
+    [Tooltip("Rocking cycles per second while moving. Higher = frantic waddle, lower = lazy sway.")]
+    [Min(0.1f)]
+    [SerializeField] private float stumbleRate = 4f;
+
+    [Tooltip("Also stumble while airborne. Off = feet-on-ground waddle only.")]
+    [SerializeField] private bool stumbleInAir = false;
+
     [Header("Breathing")]
     [Tooltip("Breaths per second while idle. Roughly 0.2-0.5 reads as calm.")]
     [SerializeField] private float breathingRate = 0.35f;
@@ -56,6 +68,8 @@ public class PlayerVisuals : MonoBehaviour
     private float squash;             // +stretch / -squash impulse, decays to 0
     private float breathPhase;
     private float breathWeight = 1f;  // fades in/out with idleness
+    private float stumblePhase;
+    private float stumbleWeight;      // fades in while moving, out while idle
     private bool wasGrounded = true;
 
     private void Awake()
@@ -100,6 +114,12 @@ public class PlayerVisuals : MonoBehaviour
         float targetLean = -move * leanAngle;
         currentLean = Mathf.Lerp(currentLean, targetLean, 1f - Mathf.Exp(-leanResponse * dt));
 
+        // --- stumble: rocking oscillation around the center while moving ---
+        bool moving = !Mathf.Approximately(move, 0f) && (stumbleInAir || controller.IsGrounded);
+        stumbleWeight = Mathf.MoveTowards(stumbleWeight, moving ? 1f : 0f, 6f * dt);
+        stumblePhase += stumbleRate * 2f * Mathf.PI * dt;
+        float stumble = Mathf.Sin(stumblePhase) * stumbleAngle * stumbleWeight;
+
         // --- landing squash ---
         bool groundedNow = controller.IsGrounded;
         if (groundedNow && !wasGrounded)
@@ -122,6 +142,6 @@ public class PlayerVisuals : MonoBehaviour
         float y = baseScale.y * (1f - breath * 0.5f + squash);
 
         visualTarget.localScale = new Vector3(x, y, baseScale.z);
-        visualTarget.localRotation = Quaternion.Euler(0f, 0f, currentLean);
+        visualTarget.localRotation = Quaternion.Euler(0f, 0f, currentLean + stumble);
     }
 }

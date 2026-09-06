@@ -53,6 +53,13 @@ public class PlayerAudio : MonoBehaviour
     [Min(0f)]
     [SerializeField] private float landingMinFallSpeed = 1.5f;
 
+    [Header("Death")]
+    [Tooltip("Played once at the moment of death.")]
+    [SerializeField] private AudioClip deathSound;
+
+    [Range(0f, 1f)]
+    [SerializeField] private float deathVolume = 0.9f;
+
     private PlayerController controller;
     private Rigidbody2D rb;
     private AudioSource footstepsSource;
@@ -84,11 +91,27 @@ public class PlayerAudio : MonoBehaviour
     private void OnEnable()
     {
         controller.Jumped += OnJumped;
+        controller.Died += OnDied;
     }
 
     private void OnDisable()
     {
         controller.Jumped -= OnJumped;
+        controller.Died -= OnDied;
+    }
+
+    private void OnDied()
+    {
+        PlayOneShotAtNormalPitch(deathSound, deathVolume);
+    }
+
+    private void PlayOneShotAtNormalPitch(AudioClip clip, float volume)
+    {
+        if (clip == null)
+            return;
+
+        oneShotSource.pitch = 1f;
+        oneShotSource.PlayOneShot(clip, volume);
     }
 
     private void OnJumped(bool isDoubleJump)

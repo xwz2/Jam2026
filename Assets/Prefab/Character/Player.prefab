@@ -361,3 +361,5 @@ MonoBehaviour:
   landingSound: {fileID: 8300000, guid: 6491940fa26f4410a88badcca42e49b7, type: 3}
   landingVolume: 0.7
   landingMinFallSpeed: 1.5
+  deathSound: {fileID: 8300000, guid: d67113c85d5d41a1a2d87964b1c08a22, type: 3}
+  deathVolume: 0.9
