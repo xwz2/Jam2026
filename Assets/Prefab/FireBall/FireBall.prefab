@@ -233,6 +233,10 @@ MonoBehaviour:
   explosion: {fileID: 4209340969596433917}
   impactFadeDuration: 0.12
   explosionFallbackDuration: 0.6
+  burningSound: {fileID: 8300000, guid: b40cf6cd2d859604eb416ae629f5b717, type: 3}
+  burningVolume: 0.6
+  explosionSound: {fileID: 8300000, guid: 6cad76720b783ef409e3f01329f465bd, type: 3}
+  explosionVolume: 1
 --- !u!1001 &3697881274292794117
 PrefabInstance:
   m_ObjectHideFlags: 0

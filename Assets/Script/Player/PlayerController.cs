@@ -47,6 +47,26 @@ public class PlayerController : MonoBehaviour
     [Min(0f)]
     [SerializeField] private float coyoteTime = 0.1f;
 
+    [Tooltip("Anticipation pause between pressing jump and actually lifting off, during which the visuals " +
+             "squash fat on the ground. 0 = instant jump. Applies to the FIRST jump only; double jump is instant.")]
+    [Range(0f, 0.3f)]
+    [SerializeField] private float jumpAnticipationTime = 0f;
+
+    [Header("Camera")]
+    [Tooltip("Move the camera with the character, rigidly locked (no lag, no jitter).")]
+    [SerializeField] private bool moveCamera = true;
+
+    [Tooltip("Camera to move. Empty = the Main Camera.")]
+    [SerializeField] private Transform cameraTransform;
+
+    [Tooltip("Camera position relative to the character. Keep Z negative so the camera stays back.")]
+    [SerializeField] private Vector3 cameraOffset = new Vector3(0f, 1f, -10f);
+
+    [Tooltip("Seconds the camera lags behind the character. 0 = rigid lock (jitter-free but stiff), " +
+             "0.1-0.3 = smooth trailing follow.")]
+    [Min(0f)]
+    [SerializeField] private float cameraDamping = 0.15f;
+
     [Header("Ground check")]
     [Tooltip("Empty child placed at the character's feet. If empty, the collider's bottom edge is used.")]
     [SerializeField] private Transform groundCheck;
@@ -66,6 +86,8 @@ public class PlayerController : MonoBehaviour
     private float firstJumpTime = float.NegativeInfinity;
     private int jumpsUsed;
     private float baseGravityScale;
+    private Vector3 cameraFollowVelocity;
+    private float anticipationTimer = -1f; // >= 0 while a first jump is charging
 
     /// <summary>-1..1 input the visuals use to face and lean the sprite.</summary>
     public float MoveInput => moveInput;
@@ -75,10 +97,16 @@ public class PlayerController : MonoBehaviour
 
     public bool IsGrounded => grounded;
 
+    /// <summary>True while the ground under the character is a drawn ink line (and nothing solid besides).</summary>
+    public bool IsOnInk { get; private set; }
+
     public bool IsAlive => alive;
 
     /// <summary>Raised once when the character dies.</summary>
     public event Action Died;
+
+    /// <summary>Raised when the character comes back to life at the end of the respawn flow.</summary>
+    public event Action Revived;
 
     /// <summary>Kills the character: flips the alive flag off and stops accepting input.</summary>
     public void Kill()
@@ -89,6 +117,7 @@ public class PlayerController : MonoBehaviour
         alive = false;
         moveInput = 0f;
         jumpQueued = false;
+        anticipationTimer = -1f; // a charging jump dies with the character
         Died?.Invoke();
     }
 
@@ -97,6 +126,7 @@ public class PlayerController : MonoBehaviour
     {
         alive = true;
         jumpsUsed = 0;
+        Revived?.Invoke();
     }
 
     /// <summary>Toggle the mid-air second jump — the inspector checkbox, also settable from gameplay code.</summary>
@@ -108,6 +138,9 @@ public class PlayerController : MonoBehaviour
 
     /// <summary>Raised on every successful jump; the bool is true for the mid-air jump.</summary>
     public event Action<bool> Jumped;
+
+    /// <summary>Raised when a first jump starts charging (the anticipation squat before liftoff).</summary>
+    public event Action JumpCharging;
 
     private void Awake()
     {
@@ -123,6 +156,9 @@ public class PlayerController : MonoBehaviour
         // interpolation the body visibly stutters whenever it moves.
         rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+
+        if (cameraTransform == null && Camera.main != null)
+            cameraTransform = Camera.main.transform;
     }
 
     private void Update()
@@ -143,10 +179,43 @@ public class PlayerController : MonoBehaviour
             jumpQueued = true;
     }
 
+    // The camera is written in LateUpdate, not FixedUpdate: the rigidbody's
+    // transform is interpolated per rendered frame, so following it from here
+    // tracks smooth motion — SmoothDamp on top adds lag without jitter.
+    private void LateUpdate()
+    {
+        if (!moveCamera || cameraTransform == null)
+            return;
+
+        Vector3 desired = transform.position + cameraOffset;
+
+        cameraTransform.position = cameraDamping <= 0f
+            ? desired
+            : Vector3.SmoothDamp(cameraTransform.position, desired, ref cameraFollowVelocity, cameraDamping);
+    }
+
+    /// <summary>Puts the camera exactly on target with no easing — call after teleporting the character.</summary>
+    public void SnapCameraToTarget()
+    {
+        if (cameraTransform == null)
+            return;
+
+        cameraFollowVelocity = Vector3.zero;
+        cameraTransform.position = transform.position + cameraOffset;
+    }
+
     private void FixedUpdate()
     {
         ProbeGround();
         ApplyHorizontalMovement();
+
+        // A charging first jump lifts off once its anticipation window elapses.
+        if (anticipationTimer >= 0f)
+        {
+            anticipationTimer -= Time.fixedDeltaTime;
+            if (anticipationTimer < 0f && alive)
+                Jump(jumpSpeed, isDoubleJump: false);
+        }
 
         if (jumpQueued)
         {
@@ -168,17 +237,25 @@ public class PlayerController : MonoBehaviour
                 ? new Vector2(bodyCollider.bounds.center.x, bodyCollider.bounds.min.y)
                 : rb.position;
 
-        // The probe must ignore the character's own collider.
+        // The probe must ignore the character's own collider. While probing,
+        // classify the surface: standing on ANY real ground counts as ground;
+        // only pure ink contact counts as "on ink".
         bool wasGrounded = grounded;
         grounded = false;
+        bool sawInk = false;
+        bool sawSolidGround = false;
         foreach (Collider2D hit in Physics2D.OverlapCircleAll(probe, groundCheckRadius, groundLayers))
         {
-            if (hit != bodyCollider && !hit.isTrigger)
-            {
-                grounded = true;
-                break;
-            }
+            if (hit == bodyCollider || hit.isTrigger)
+                continue;
+
+            grounded = true;
+            if (hit.GetComponentInParent<InkLine>() != null)
+                sawInk = true;
+            else
+                sawSolidGround = true;
         }
+        IsOnInk = grounded && sawInk && !sawSolidGround;
 
         if (grounded)
         {
@@ -199,10 +276,22 @@ public class PlayerController : MonoBehaviour
 
     private void TryJump()
     {
+        if (anticipationTimer >= 0f)
+            return; // already charging a jump; ignore extra presses until liftoff
+
         bool canFirstJump = jumpsUsed == 0 && (grounded || Time.time - lastGroundedTime <= coyoteTime);
         if (canFirstJump)
         {
-            Jump(jumpSpeed, isDoubleJump: false);
+            if (jumpAnticipationTime > 0f)
+            {
+                // Fat squat first; the actual liftoff fires when the timer runs out.
+                anticipationTimer = jumpAnticipationTime;
+                JumpCharging?.Invoke();
+            }
+            else
+            {
+                Jump(jumpSpeed, isDoubleJump: false);
+            }
             return;
         }
 

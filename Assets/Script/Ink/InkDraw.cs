@@ -18,9 +18,13 @@ public class InkDraw : MonoBehaviour
     [Min(0.1f)]
     [SerializeField] private float capacity = 20f;
 
-    [Tooltip("Ink regained per second.")]
+    [Tooltip("Ink regained per second while the character stands on REAL ground (not on drawn ink lines, " +
+             "not airborne). No refill happens anywhere else.")]
     [Min(0f)]
     [SerializeField] private float refillRate = 2f;
+
+    [Tooltip("The character whose footing gates the refill. Empty = found automatically on Awake.")]
+    [SerializeField] private PlayerController player;
 
     [Tooltip("Also refill while the player is actively drawing. Off = the tank only recovers between strokes.")]
     [SerializeField] private bool refillWhileDrawing = false;
@@ -74,6 +78,21 @@ public class InkDraw : MonoBehaviour
     [Min(0f)]
     [SerializeField] private float lineFadeDuration = 0.75f;
 
+    [Header("Audio")]
+    [Tooltip("Looping sound played while the player is actively drawing a stroke.")]
+    [SerializeField] private AudioClip drawingSound;
+
+    [Range(0f, 1f)]
+    [SerializeField] private float drawingVolume = 0.6f;
+
+    [Tooltip("How quickly the drawing sound swells/fades when a stroke starts and ends, in 1/seconds.")]
+    [Min(1f)]
+    [SerializeField] private float drawingFadeResponse = 14f;
+
+    [Tooltip("Playback speed of the drawing loop. 1 = as recorded.")]
+    [Range(0.25f, 3f)]
+    [SerializeField] private float drawingSoundSpeed = 1f;
+
     [Header("Housekeeping")]
     [Tooltip("Maximum finished strokes kept in the scene; the oldest is erased (and NOT refunded) " +
              "when the limit is exceeded. 0 = unlimited.")]
@@ -88,6 +107,7 @@ public class InkDraw : MonoBehaviour
 
     private InkLine activeLine;
     private Material runtimeDefaultMaterial;
+    private AudioSource drawingSource;
 
     /// <summary>Current ink, in world-units of drawable length.</summary>
     public float CurrentInk => currentInk;
@@ -107,11 +127,26 @@ public class InkDraw : MonoBehaviour
         currentInk = capacity; // complete at first, per design
         if (drawCamera == null)
             drawCamera = Camera.main;
+        if (player == null)
+            player = FindFirstObjectByType<PlayerController>();
+
+        // Drawing loop: 2D (screen-wide action, distance is meaningless for it),
+        // volume-ramped so strokes never start or end with a click.
+        if (drawingSound != null)
+        {
+            drawingSource = gameObject.AddComponent<AudioSource>();
+            drawingSource.clip = drawingSound;
+            drawingSource.loop = true;
+            drawingSource.playOnAwake = false;
+            drawingSource.volume = 0f;
+            drawingSource.spatialBlend = 0f;
+        }
     }
 
     private void Update()
     {
         Refill();
+        UpdateDrawingSound();
 
         // Pointer.current covers mouse AND touch through one API.
         var pointer = Pointer.current;
@@ -126,11 +161,34 @@ public class InkDraw : MonoBehaviour
             FinishStroke();
     }
 
+    private void UpdateDrawingSound()
+    {
+        if (drawingSource == null)
+            return;
+
+        drawingSource.pitch = drawingSoundSpeed;
+
+        float target = IsDrawing ? drawingVolume : 0f;
+        drawingSource.volume = Mathf.Lerp(drawingSource.volume, target,
+            1f - Mathf.Exp(-drawingFadeResponse * Time.deltaTime));
+
+        if (IsDrawing && !drawingSource.isPlaying)
+            drawingSource.Play();
+        else if (!IsDrawing && drawingSource.isPlaying && drawingSource.volume < 0.01f)
+            drawingSource.Stop();
+    }
+
     private void Refill()
     {
         if (refillRate <= 0f || currentInk >= capacity)
             return;
         if (IsDrawing && !refillWhileDrawing)
+            return;
+
+        // The tank only recovers with both feet on real ground: airborne or
+        // standing on drawn ink lines earns nothing. (No player found = the
+        // old always-refill behavior, so the ink system works standalone.)
+        if (player != null && (!player.IsGrounded || player.IsOnInk))
             return;
 
         currentInk = Mathf.Min(capacity, currentInk + refillRate * Time.deltaTime);
